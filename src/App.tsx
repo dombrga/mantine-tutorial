@@ -1,34 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import {
+  Button,
+  ColorScheme,
+  ColorSchemeProvider,
+  Loader,
+  MantineProvider,
+  Paper,
+  Text,
+} from "@mantine/core";
+import { useLocalStorage, useHotkeys } from "@mantine/hooks";
+import { SunIcon } from "@modulz/radix-icons";
+import { useState } from "react";
+import Cards from "./components/Cards";
+import LightDarkButton from "./components/LightDarkButton";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: "mantine-color-scheme",
+    defaultValue: "light",
+    getInitialValueInEffect: true,
+  });
+
+  const toggleColorScheme = (value?: ColorScheme) => {
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  };
+
+  useHotkeys([["mod+J", () => toggleColorScheme()]]);
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
+      >
+        <MantineProvider
+          withNormalizeCSS
+          withGlobalStyles
+          theme={{
+            colorScheme: colorScheme,
+          }}
+        >
+          <Paper p="md" radius={0} style={{ minHeight: "100vh" }}>
+          <Button leftIcon={<SunIcon />} loading={false}>
+      Connect to database
+    </Button>
+            <Cards />
+            <LightDarkButton />
+          </Paper>
+        </MantineProvider>
+      </ColorSchemeProvider>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
