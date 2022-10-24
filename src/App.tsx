@@ -1,4 +1,5 @@
 import {
+  AppShell,
   Button,
   ColorScheme,
   ColorSchemeProvider,
@@ -10,6 +11,7 @@ import {
 import { useLocalStorage, useHotkeys } from "@mantine/hooks";
 import { SunIcon } from "@modulz/radix-icons";
 import { useState } from "react";
+import AppShellDemo from "./components/AppShell";
 import Cards from "./components/Cards";
 import LightDarkButton from "./components/LightDarkButton";
 
@@ -39,13 +41,7 @@ function App() {
             colorScheme: colorScheme,
           }}
         >
-          <Paper p="md" radius={0} style={{ minHeight: "100vh" }}>
-          <Button leftIcon={<SunIcon />} loading={false}>
-      Connect to database
-    </Button>
-            <Cards />
-            <LightDarkButton />
-          </Paper>
+          <AppShellDemo />
         </MantineProvider>
       </ColorSchemeProvider>
     </div>
